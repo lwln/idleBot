@@ -1,8 +1,9 @@
 <?php
 // Make sure we're in the current directory
+start:
 chdir(dirname(realpath(__FILE__)));
-include('Config/rooms.php');
-include('Config/users.php');
+require('Config/rooms.php');
+require('Config/users.php');
 require('Core/dAmnPHP.php');
 $dAmn = new dAmnPHP;
 
@@ -30,12 +31,19 @@ foreach($tokenlist as $un => $token) {
 while($connected) {
 	global $socket;
 	foreach($socket as $username => $sock) {
-		$response = "";
-		@socket_recv($sock, $response,8192,0);
-		$response = sort_dAmn_packet($response);
+		$packet = "";
+		@socket_recv($sock, $packet,8192,0);
+		$packet = sort_dAmn_packet($packet);
+		$packet = $packet['packet'];
+		$packet = parse_dAmn_packet($packet['raw']);
+		if($packet['cmd'] == 'disconnect') {
+			break;
+		}
 		send("pong\n".chr(0),$username);
 	}
 }
+
+goto start;
 
 function send($data, $socketname, $boic = FALSE) {
 	global $socket;
