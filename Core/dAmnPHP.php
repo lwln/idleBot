@@ -626,6 +626,7 @@ function sort_dAmn_packet($packet) {
 			break;
 		case 'disconnect':
 			$log = 'Disconnected from dAmn ['.$p[0].']';
+			$dAmn->Warning('Disconnected from dAmn ['.$p[0].']');
 			break;
 		case 'recv':
 			$sub = parse_dAmn_packet($packet['body']);
@@ -635,13 +636,20 @@ function sort_dAmn_packet($packet) {
 				case 'action':
 					$data['p'][1] = $sub['args']['from'];
 					$data['p'][2] = $sub['body'];
-					$dAmn->Message('[#'.substr($data['p'][0], 5).'] <'.$data['p'][1].'> '.$data['p'][2]);
+					if(strtolower($sub['cmd']) == 'msg')
+						$dAmn->Message('[#'.substr($data['p'][0], 5).'] <'.$data['p'][1].'> '.$data['p'][2]);
+					else
+						$dAmn->Message('[#'.substr($data['p'][0], 5).'] '.$data['p'][1].' '.$data['p'][2]);
 					break;
 				case 'join':
 				case 'part':
 					$data['p'][1] = $sub['param'];
 					if(array_key_exists('r', $sub['args'])) $data['p'][2] = $sub['args']['r'];
 					if($sub['cmd']=='join') $data['p'][2] = $sub['body'];
+					if($sub['cmd'] == 'join')
+						$dAmn->Notice($data['p'][1].' joined #'.substr($data['p'][0], 5));
+					else
+						$dAmn->Notice($data['p'][1].' parted #'.substr($data['p'][0], 5));
 					break;
 				case 'privchg':
 				case 'kicked':
