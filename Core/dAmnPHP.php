@@ -567,21 +567,21 @@ function parse_dAmn_packet($data, $sep = '=') {
 		'body' => Null,
 		'raw' => $data
 	);
-	if(stristr($data, "\n\n")) {
-		$packet['body'] = trim(stristr($data, "\n\n"));
-		$data = substr($data, 0, strpos($data, "\n\n"));
-	}
-	$data = explode("\n", $data);
-	foreach($data as $id => $str) {
-		if(strpos($str, $sep) != 0)
-			$packet['args'][substr($str, 0, strpos($str, $sep))] = substr($str, strpos($str, $sep)+1);
-		elseif(isset($str[1])) {
-			if(!stristr($str, ' ')) { $packet['cmd'] = $str; } else {
-				$packet['cmd'] = substr($str, 0, strpos($str, ' '));
-				$packet['param'] = trim(stristr($str, ' '));
-			}
-		}
-	}
+//	if(stristr($data, "\n\n")) {
+//		$packet['body'] = trim(stristr($data, "\n\n"));
+//		$data = substr($data, 0, strpos($data, "\n\n"));
+//	}
+//	$data = explode("\n", $data);
+//	foreach($data as $id => $str) {
+//		if(strpos($str, $sep) != 0)
+//			$packet['args'][substr($str, 0, strpos($str, $sep))] = substr($str, strpos($str, $sep)+1);
+//		elseif(isset($str[1])) {
+//			if(!stristr($str, ' ')) { $packet['cmd'] = $str; } else {
+//				$packet['cmd'] = substr($str, 0, strpos($str, ' '));
+//				$packet['param'] = trim(stristr($str, ' '));
+//			}
+//		}
+//	}
 	return $packet;
 }
 
