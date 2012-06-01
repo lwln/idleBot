@@ -34,9 +34,9 @@ while($connected) {
 	foreach($socket as $username => $sock) {
 		$response = "";
 		@socket_recv($sock, $response,8192,0);
-		$response = parse_dAmn_packet($response);
 		send("pong\n".chr(0),$username);
 	}
+	$response = parse_dAmn_packet($response);
 	if(!empty($response) && $response != '' && $response != ' ' && strstr($response, '#$chat') === false) {
 		Message($response);
 	}
