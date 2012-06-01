@@ -35,12 +35,12 @@ while($connected) {
 		@socket_recv($sock, $packet,8192,0);
 		$packet = sort_dAmn_packet($packet);
 		$packet = $packet['packet'];
-		if($packet['cmd'] == 'disconnect') {
-			break;
-		}
 		send("pong\n".chr(0),$username);
 	}
+	if($packet['cmd'] == 'disconnect')
+		break;
 	$packet = parse_dAmn_packet($packet['raw']);
+
 }
 
 goto start;
